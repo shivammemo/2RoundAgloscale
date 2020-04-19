@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdminPanel</title>
+    <style>
+        *{
+            background-color: lightgray;
+        }
+        .display{
+            margin-left: 15%;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">List of Existing User</h1>
+    <% users.forEach(function(user){ %>
+    <div class="display">
+       <ol style="list-style-type:none;">
+           <li style="font-weight: bold;font-size: 25px;">USER</li>
+           <ul>
+               <li style="font-size: 20px;">Name:&nbsp;&nbsp;<%= user.name %></li>
+               <li style="font-size: 20px;">Email:&nbsp;&nbsp;<%= user.email %></li>
+           </ul>
+       </ol>
+    </div>
+    <% }); %>
+</body>
+</html>
