@@ -11,6 +11,15 @@
         .display{
             margin-left: 15%;
         }
+        .btn{
+            margin-left: 8%;
+            width: 150px;
+            border-radius: 5px;
+            background-color: white;
+        }
+        .btn:hover{
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -22,6 +31,10 @@
            <ul>
                <li style="font-size: 20px;">Name:&nbsp;&nbsp;<%= user.name %></li>
                <li style="font-size: 20px;">Email:&nbsp;&nbsp;<%= user.email %></li>
+               <br>
+               <form action="/users/<%=user._id%>?_method=DELETE" method="POST" >
+                    <button class="btn">Delete</button>
+               </form>
            </ul>
        </ol>
     </div>

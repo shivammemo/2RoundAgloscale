@@ -2,6 +2,7 @@ var express               = require("express"),
     mongoose              = require("mongoose");
     passport              = require("passport"),
     bodyParser            = require("body-parser"),
+    methodOverride        = require("method-override"),
     User                  = require("./models/user"),
     LocalStrategy         = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose");
@@ -10,6 +11,7 @@ mongoose.connect("mongodb://localhost/algoscale");
 var app = express()
 
 app.set('view engine','ejs');
+app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(require("express-session")({
     secret:"Rusty is the best og in the world",
@@ -38,16 +40,16 @@ app.post("/register",function(req,res){
             return res.render('signup');
         } //user stragety
         passport.authenticate("local")(req, res, function () {
-            res.redirect("/admin"); //once the user sign up
+            res.redirect("/users"); //once the user sign up
         });
     });
 });
-app.get("/admin",isLoggedIn,function(req,res){
+app.get("/users",isLoggedIn,function(req,res){
     User.find({},function(err,allUsers){
         if(err){
             console.log(err);
         }else{
-            res.render("admin",{users: allUsers});
+            res.render("users",{users: allUsers});
         }
     });
 });
@@ -55,7 +57,7 @@ app.get("/login",function(req,res){
     res.render("login");
 });
 app.post("/login", passport.authenticate("local", {
-    successRedirect: "/admin",
+    successRedirect: "/users",
     failureRedirect: "/login"
 }), function (req, res) {
     res.send("User is " + req.user.id);
@@ -64,8 +66,14 @@ app.get("/logout",function(req,res){
     req.logout();
     res.redirect("/");
 });
-app.delete("/admin",function(req,res){
-    res.send("You are trying to delete something");
+app.delete("/users/:id",function(req,res){
+    User.findByIdAndRemove(req.params.id,function(err){
+        if(err){
+            res.redirect("/users");
+        }else{
+            res.redirect("/users");
+        }
+    });
 });
 function isLoggedIn(req,res,next){
     if(req.isAuthenticated()){
